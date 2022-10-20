@@ -53,7 +53,7 @@ export class App extends Component {
         <FormBox>
           <ContactForm onSubmitForm={this.formSubmitHandler} />
         </FormBox>
-        React homework template
+
         <ContactTitle title="Contacts" />
         <Filter
           handleInputChange={this.handleFilterInput}
