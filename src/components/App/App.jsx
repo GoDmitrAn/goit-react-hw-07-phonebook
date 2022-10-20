@@ -1,4 +1,3 @@
-import { customAlphabet } from 'nanoid';
 import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactTitle } from 'components/ContactTitle/ContactTitle';
 import { SectionTitle } from 'components/SectionTitle/SectionTitle';
@@ -6,7 +5,7 @@ import { Component } from 'react';
 import { FormBox, SectionBox } from './App.styled';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from 'components/Filter/Filter';
-const nanoid = customAlphabet('1234567890abcdef', 10);
+
 export class App extends Component {
   state = {
     contacts: [
@@ -16,54 +15,48 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
   contactsList = this.state.contacts;
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-    if (name === 'filter') {
-      this.setState({ contacts: this.filterContacts(value) });
+  setContactList(data) {
+    this.contactsList = data;
+  }
+  formSubmitHandler = data => {
+    if (this.state.contacts.find(contact => contact.name === data.name)) {
+      return alert(`${data.name} is already in contacts`);
+    } else {
+      this.setState(
+        prevState => ({ contacts: [...prevState.contacts, data] }),
+        () => {
+          this.setContactList(this.state.contacts);
+        }
+      );
     }
   };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const id = nanoid();
-    const array = [...this.state.contacts];
-    array.push({ name: this.state.name, id: id, number: this.state.number });
-    this.setState({ contacts: array });
-    this.contactsList = this.state.contacts;
-    this.reset();
+  handleFilterInput = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+    this.setState({ contacts: this.filterContacts(value) });
   };
   filterContacts = value => {
-    let newList = this.contactsList.filter(contact => {
+    return this.contactsList.filter(contact => {
       let nameLowerCase = contact.name.toLowerCase();
       return nameLowerCase.includes(value.toLowerCase());
     });
-    return newList;
   };
-  reset = () => {
-    this.setState({ name: '', number: '', filter: '' });
-  };
+
   render() {
     const contacts = this.state.contacts;
+
     return (
       <SectionBox>
         <SectionTitle title="Phonebook" />
         <FormBox>
-          <ContactForm
-            handleSubmit={this.handleSubmit}
-            handleInputChange={this.handleInputChange}
-            nameValue={this.state.name}
-            numberValue={this.state.number}
-          />
+          <ContactForm onSubmitForm={this.formSubmitHandler} />
         </FormBox>
         React homework template
         <ContactTitle title="Contacts" />
         <Filter
-          handleInputChange={this.handleInputChange}
+          handleInputChange={this.handleFilterInput}
           filterValue={this.state.filter}
         />
         <ContactList contacts={contacts} />
