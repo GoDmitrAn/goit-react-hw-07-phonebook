@@ -43,7 +43,11 @@ export class App extends Component {
       return nameLowerCase.includes(value.toLowerCase());
     });
   };
-
+  deleteUserFromList = userId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(item => item.id !== userId),
+    }));
+  };
   render() {
     const contacts = this.state.contacts;
 
@@ -59,7 +63,10 @@ export class App extends Component {
           handleInputChange={this.handleFilterInput}
           filterValue={this.state.filter}
         />
-        <ContactList contacts={contacts} />
+        <ContactList
+          contacts={contacts}
+          handleDeleteUser={this.deleteUserFromList}
+        />
       </SectionBox>
     );
   }
