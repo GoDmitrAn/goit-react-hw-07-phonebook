@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { ListBox, ContactListItem, DelBtn, Span } from './ContactList.styled';
 export const ContactList = ({ contacts, handleDeleteUser }) => {
   return (
@@ -16,4 +18,14 @@ export const ContactList = ({ contacts, handleDeleteUser }) => {
       })}
     </ListBox>
   );
+};
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
+  handleDeleteUser: PropTypes.func,
 };

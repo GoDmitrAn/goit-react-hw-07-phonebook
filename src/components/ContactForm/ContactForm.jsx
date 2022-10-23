@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { customAlphabet } from 'nanoid';
 
 import { Component } from 'react';
@@ -11,14 +12,6 @@ export class ContactForm extends Component {
     const id = nanoid();
     this.props.onSubmitForm({ id, ...this.state });
     this.reset();
-    // const array = [...this.state.contacts];
-    // array.push({ name: this.state.name, id: id, number: this.state.number });
-    // this.setState({ contacts: array });
-    // console.log('this.setState', this.setState);
-    // this.contactsList = this.state.contacts;
-    // console.log('this.contactsList', this.contactsList);
-
-    // this.reset();
   };
   reset = () => {
     this.setState({ name: '', number: '' });
@@ -26,9 +19,6 @@ export class ContactForm extends Component {
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-    // if (name === 'filter') {
-    //   this.setState({ contacts: this.filterContacts(value) });
-    // }
   };
   render() {
     return (
@@ -62,3 +52,10 @@ export class ContactForm extends Component {
     );
   }
 }
+ContactForm.propTypes = {
+  state: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }),
+  id: PropTypes.string,
+};

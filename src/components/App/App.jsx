@@ -1,6 +1,4 @@
 import { ContactForm } from 'components/ContactForm/ContactForm';
-import { ContactTitle } from 'components/ContactTitle/ContactTitle';
-import { SectionTitle } from 'components/SectionTitle/SectionTitle';
 import { Component } from 'react';
 import { FormBox, SectionBox } from './App.styled';
 import { ContactList } from 'components/ContactList/ContactList';
@@ -16,29 +14,22 @@ export class App extends Component {
     ],
     filter: '',
   };
-  contactsList = this.state.contacts;
-  setContactList(data) {
-    this.contactsList = data;
-  }
+  contactsFilteredList = null;
   formSubmitHandler = data => {
     if (this.state.contacts.find(contact => contact.name === data.name)) {
       return alert(`${data.name} is already in contacts`);
     } else {
-      this.setState(
-        prevState => ({ contacts: [...prevState.contacts, data] }),
-        () => {
-          this.setContactList(this.state.contacts);
-        }
-      );
+      this.setState(prevState => ({ contacts: [...prevState.contacts, data] }));
     }
   };
   handleFilterInput = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-    this.setState({ contacts: this.filterContacts(value) });
+    const { value } = event.target;
+    this.setState({ filter: value });
+    this.contactsFilteredList = this.filterContacts(value);
   };
   filterContacts = value => {
-    return this.contactsList.filter(contact => {
+    if (!value) return null;
+    return this.state.contacts.filter(contact => {
       let nameLowerCase = contact.name.toLowerCase();
       return nameLowerCase.includes(value.toLowerCase());
     });
@@ -49,16 +40,19 @@ export class App extends Component {
     }));
   };
   render() {
-    const contacts = this.state.contacts;
+    const contacts = !this.contactsFilteredList
+      ? this.state.contacts
+      : this.contactsFilteredList;
 
     return (
       <SectionBox>
-        <SectionTitle title="Phonebook" />
+        <h1>Phonebook</h1>
+
         <FormBox>
           <ContactForm onSubmitForm={this.formSubmitHandler} />
         </FormBox>
+        <h2>Contacts</h2>
 
-        <ContactTitle title="Contacts" />
         <Filter
           handleInputChange={this.handleFilterInput}
           filterValue={this.state.filter}
