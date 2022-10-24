@@ -26,6 +26,6 @@ ContactList.propTypes = {
       name: PropTypes.string.isRequired,
       number: PropTypes.string.isRequired,
     })
-  ),
-  handleDeleteUser: PropTypes.func,
+  ).isRequired,
+  handleDeleteUser: PropTypes.func.isRequired,
 };

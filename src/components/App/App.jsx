@@ -14,7 +14,7 @@ export class App extends Component {
     ],
     filter: '',
   };
-  contactsFilteredList = null;
+
   formSubmitHandler = data => {
     if (this.state.contacts.find(contact => contact.name === data.name)) {
       return alert(`${data.name} is already in contacts`);
@@ -25,10 +25,9 @@ export class App extends Component {
   handleFilterInput = event => {
     const { value } = event.target;
     this.setState({ filter: value });
-    this.contactsFilteredList = this.filterContacts(value);
   };
-  filterContacts = value => {
-    if (!value) return null;
+  filterContacts = () => {
+    const value = this.state.filter;
     return this.state.contacts.filter(contact => {
       let nameLowerCase = contact.name.toLowerCase();
       return nameLowerCase.includes(value.toLowerCase());
@@ -40,10 +39,6 @@ export class App extends Component {
     }));
   };
   render() {
-    const contacts = !this.contactsFilteredList
-      ? this.state.contacts
-      : this.contactsFilteredList;
-
     return (
       <SectionBox>
         <h1>Phonebook</h1>
@@ -58,7 +53,7 @@ export class App extends Component {
           filterValue={this.state.filter}
         />
         <ContactList
-          contacts={contacts}
+          contacts={this.filterContacts()}
           handleDeleteUser={this.deleteUserFromList}
         />
       </SectionBox>
