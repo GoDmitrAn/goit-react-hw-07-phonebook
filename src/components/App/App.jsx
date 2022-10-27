@@ -14,7 +14,19 @@ export class App extends Component {
     ],
     filter: '',
   };
-
+  componentDidUpdate(prevState) {
+    if (
+      this.state.contacts.length > 0 &&
+      this.state.contacts !== prevState.contacts
+    ) {
+      this.addToLocalStorage(this.state.contacts);
+      console.log('added new storage data');
+    }
+  }
+  componentDidMount() {
+    this.loadFromLocalStorage();
+  }
+  localStorageKey = 'userContacts';
   formSubmitHandler = data => {
     if (this.state.contacts.find(contact => contact.name === data.name)) {
       return alert(`${data.name} is already in contacts`);
@@ -37,6 +49,29 @@ export class App extends Component {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(item => item.id !== userId),
     }));
+  };
+  addToLocalStorage = data => {
+    try {
+      const serializedState = JSON.stringify(data);
+      localStorage.setItem(this.localStorageKey, serializedState);
+    } catch (error) {
+      console.error('Set state error: ', error.message);
+    }
+  };
+  loadFromLocalStorage = () => {
+    try {
+      const serializedState = localStorage.getItem(this.localStorageKey);
+      console.log(serializedState);
+      if (serializedState === null || serializedState.length === 0) {
+        console.log('localStorage is empty');
+      } else {
+        this.setState({ contacts: JSON.parse(serializedState) });
+        console.log('localStorage loaded');
+      }
+      // return serializedState === null ? undefined : JSON.parse(serializedState);
+    } catch (error) {
+      console.error('Get state error: ', error.message);
+    }
   };
   render() {
     return (
