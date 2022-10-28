@@ -15,12 +15,8 @@ export class App extends Component {
     filter: '',
   };
   componentDidUpdate(prevState) {
-    if (
-      this.state.contacts.length > 0 &&
-      this.state.contacts !== prevState.contacts
-    ) {
+    if (this.state.contacts !== prevState.contacts) {
       this.addToLocalStorage(this.state.contacts);
-      console.log('added new storage data');
     }
   }
   componentDidMount() {
@@ -61,14 +57,12 @@ export class App extends Component {
   loadFromLocalStorage = () => {
     try {
       const serializedState = localStorage.getItem(this.localStorageKey);
-      console.log(serializedState);
-      if (serializedState === null || serializedState.length === 0) {
+
+      if (serializedState === null) {
         console.log('localStorage is empty');
       } else {
         this.setState({ contacts: JSON.parse(serializedState) });
-        console.log('localStorage loaded');
       }
-      // return serializedState === null ? undefined : JSON.parse(serializedState);
     } catch (error) {
       console.error('Get state error: ', error.message);
     }
