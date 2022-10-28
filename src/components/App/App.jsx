@@ -58,9 +58,7 @@ export class App extends Component {
     try {
       const serializedState = localStorage.getItem(this.localStorageKey);
 
-      if (serializedState === null) {
-        console.log('localStorage is empty');
-      } else {
+      if (serializedState !== null) {
         this.setState({ contacts: JSON.parse(serializedState) });
       }
     } catch (error) {
