@@ -1,89 +1,81 @@
 import { ContactForm } from 'components/ContactForm/ContactForm';
-import { Component } from 'react';
 import { FormBox, SectionBox } from './App.styled';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from 'components/Filter/Filter';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-export class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-  };
-  componentDidUpdate(prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      this.addToLocalStorage(this.state.contacts);
+export const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [userFilter, setFilter] = useState('');
+  const [firstMount, setFirstMount] = useState(true);
+  useEffect(() => {
+    loadFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    if (firstMount) {
+      return;
     }
-  }
-  componentDidMount() {
-    this.loadFromLocalStorage();
-  }
-  localStorageKey = 'userContacts';
-  formSubmitHandler = data => {
-    if (this.state.contacts.find(contact => contact.name === data.name)) {
+    addToLocalStorage(contacts);
+  }, [contacts, firstMount]);
+
+  const localStorageKey = 'userContacts';
+  const formSubmitHandler = data => {
+    if (contacts.find(contact => contact.name === data.name)) {
       return alert(`${data.name} is already in contacts`);
     } else {
-      this.setState(prevState => ({ contacts: [...prevState.contacts, data] }));
+      setContacts(prevState => [...prevState, data]);
     }
   };
-  handleFilterInput = event => {
+  const handleFilterInput = event => {
     const { value } = event.target;
-    this.setState({ filter: value });
+    setFilter(value);
   };
-  filterContacts = () => {
-    const value = this.state.filter;
-    return this.state.contacts.filter(contact => {
+  const filterContacts = () => {
+    return contacts.filter(contact => {
       let nameLowerCase = contact.name.toLowerCase();
-      return nameLowerCase.includes(value.toLowerCase());
+      return nameLowerCase.includes(userFilter.toLowerCase());
     });
   };
-  deleteUserFromList = userId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(item => item.id !== userId),
-    }));
+  const deleteUserFromList = userId => {
+    setContacts(contacts.filter(item => item.id !== userId));
   };
-  addToLocalStorage = data => {
+  const addToLocalStorage = data => {
     try {
       const serializedState = JSON.stringify(data);
-      localStorage.setItem(this.localStorageKey, serializedState);
+      localStorage.setItem(localStorageKey, serializedState);
     } catch (error) {
       console.error('Set state error: ', error.message);
     }
   };
-  loadFromLocalStorage = () => {
+  const loadFromLocalStorage = () => {
     try {
-      const serializedState = localStorage.getItem(this.localStorageKey);
+      const serializedState = localStorage.getItem(localStorageKey);
 
       if (serializedState !== null) {
-        this.setState({ contacts: JSON.parse(serializedState) });
+        setContacts(JSON.parse(serializedState));
       }
+      setFirstMount(false);
     } catch (error) {
       console.error('Get state error: ', error.message);
     }
   };
-  render() {
-    return (
-      <SectionBox>
-        <h1>Phonebook</h1>
 
-        <FormBox>
-          <ContactForm onSubmitForm={this.formSubmitHandler} />
-        </FormBox>
-        <h2>Contacts</h2>
+  return (
+    <SectionBox>
+      <h1>Phonebook</h1>
 
-        <Filter
-          handleInputChange={this.handleFilterInput}
-          filterValue={this.state.filter}
-        />
-        <ContactList
-          contacts={this.filterContacts()}
-          handleDeleteUser={this.deleteUserFromList}
-        />
-      </SectionBox>
-    );
-  }
-}
+      <FormBox>
+        <ContactForm onSubmitForm={formSubmitHandler} />
+      </FormBox>
+      <h2>Contacts</h2>
+
+      <Filter handleInputChange={handleFilterInput} filterValue={userFilter} />
+      <ContactList
+        contacts={filterContacts()}
+        handleDeleteUser={deleteUserFromList}
+      />
+    </SectionBox>
+  );
+};

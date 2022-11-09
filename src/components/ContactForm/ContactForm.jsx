@@ -13,7 +13,7 @@ export const ContactForm = ({ onSubmitForm }) => {
   const handleSubmit = event => {
     event.preventDefault();
     const id = nanoid();
-    onSubmitForm({ id, name, number });
+    onSubmitForm({ id: id, name: name, number: number });
     reset();
   };
   const reset = () => {
