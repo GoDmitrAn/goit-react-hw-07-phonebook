@@ -1,16 +1,27 @@
-import PropTypes from 'prop-types';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getFilter, getUsers } from 'redux/selectors';
+import { deleteUser } from 'redux/usersSlice';
 import { ListBox, ContactListItem, DelBtn, Span } from './ContactList.styled';
-export const ContactList = ({ contacts, handleDeleteUser }) => {
+export const ContactList = () => {
+  const dispatch = useDispatch();
+  const contactsList = useSelector(getUsers);
+  const filterValue = useSelector(getFilter);
+  const filterContacts = () => {
+    return contactsList.filter(contact => {
+      let nameLowerCase = contact.name.toLowerCase();
+      return nameLowerCase.includes(filterValue.toLowerCase());
+    });
+  };
+
   return (
     <ListBox>
-      {contacts.map(({ id, name, number }) => {
+      {filterContacts().map(({ id, name, phoneNumber }) => {
         return (
           <ContactListItem key={id}>
             <Span>
-              {name} : {number}
+              {name} : {phoneNumber}
             </Span>
-            <DelBtn type="button" onClick={() => handleDeleteUser(id)}>
+            <DelBtn type="button" onClick={() => dispatch(deleteUser(id))}>
               Delete
             </DelBtn>
           </ContactListItem>
@@ -18,14 +29,4 @@ export const ContactList = ({ contacts, handleDeleteUser }) => {
       })}
     </ListBox>
   );
-};
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  handleDeleteUser: PropTypes.func.isRequired,
 };
