@@ -3,35 +3,39 @@ import { filterReducer } from './filterSlice';
 import { usersReducer } from './usersSlice';
 
 // predux-persist  on localstorage
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+// import {
+//   persistStore,
+//   persistReducer,
+//   FLUSH,
+//   REHYDRATE,
+//   PAUSE,
+//   PERSIST,
+//   PURGE,
+//   REGISTER,
+// } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 
-const rootReducer = combineReducers({
-  users: usersReducer,
-  filter: filterReducer,
-});
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: ['filter'], // filter will not be persisted
-};
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const rootReducer = combineReducers({
+//   users: usersReducer,
+//   filter: filterReducer,
+// });
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+//   blacklist: ['filter'], // filter will not be persisted
+// };
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  // reducer: persistedReducer,
+  // middleware: getDefaultMiddleware =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: {
+  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  //     },
+  //   }),
+  reducer: {
+    users: usersReducer,
+    filter: filterReducer,
+  },
 });
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);
