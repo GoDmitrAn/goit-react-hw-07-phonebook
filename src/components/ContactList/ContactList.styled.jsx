@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 export const ListBox = styled.ul`
   width: 330px;
+  padding-left: 20px;
 `;
 export const ContactListItem = styled.li`
   display: flex;

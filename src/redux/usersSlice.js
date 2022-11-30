@@ -4,6 +4,13 @@ import { addUser, deleteUser, fetchContacts } from './operations';
 //   { id: 0, name: 'Teili', phoneNumber: '+3556845561' },
 //   { id: 1, name: 'Gofor', phoneNumber: '+1225545662' },
 // ];
+const handlePending = state => {
+  state.isLoading = true;
+};
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
 const usersSlice = createSlice({
   name: 'users',
   initialState: {
@@ -21,33 +28,23 @@ const usersSlice = createSlice({
   //   },
   // },
   extraReducers: {
-    [fetchContacts.pending](state) {
-      state.isLoading = true;
-    },
+    [fetchContacts.pending]: handlePending,
     [fetchContacts.fulfilled](state, action) {
       state.isLoading = false;
       state.error = null;
       state.items = action.payload;
     },
-    [fetchContacts.rejected](state, action) {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [addUser.pending](state) {
-      state.isLoading = true;
-    },
+    [fetchContacts.rejected]: handleRejected,
+
+    [addUser.pending]: handlePending,
     [addUser.fulfilled](state, action) {
       state.isLoading = false;
       state.error = null;
       state.items.push(action.payload);
     },
-    [addUser.rejected](state, action) {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [deleteUser.pending](state) {
-      state.isLoading = true;
-    },
+    [addUser.rejected]: handleRejected,
+
+    [deleteUser.pending]: handlePending,
     [deleteUser.fulfilled](state, action) {
       state.isLoading = false;
       state.error = null;
@@ -56,10 +53,7 @@ const usersSlice = createSlice({
       );
       state.items.splice(index, 1);
     },
-    [deleteUser.rejected](state, action) {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+    [deleteUser.rejected]: handleRejected,
   },
 });
 // export const { addUser, deleteUser } = usersSlice.actions;

@@ -4,14 +4,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { addUser } from 'redux/usersSlice';
 import { Form, LabelName, Submit } from './ContactForm.styled';
-import { getUsers } from 'redux/selectors';
+import { selectUsers } from 'redux/selectors';
 import { addUser } from 'redux/operations';
 
 // const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contactsList = useSelector(getUsers);
+  const contactsList = useSelector(selectUsers);
 
   const handleSubmit = event => {
     event.preventDefault();
