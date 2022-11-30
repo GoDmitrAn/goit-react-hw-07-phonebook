@@ -1,12 +1,13 @@
 import React from 'react';
-import { customAlphabet } from 'nanoid';
+// import { customAlphabet } from 'nanoid';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser } from 'redux/usersSlice';
+// import { addUser } from 'redux/usersSlice';
 import { Form, LabelName, Submit } from './ContactForm.styled';
 import { getUsers } from 'redux/selectors';
+import { addUser } from 'redux/operations';
 
-const nanoid = customAlphabet('1234567890abcdef', 10);
+// const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,8 @@ export const ContactForm = () => {
       return alert(`${form.elements.name.value} is already in contacts`);
     }
     const newUser = {
-      id: nanoid(),
       name: form.elements.name.value,
-      phoneNumber: form.elements.number.value,
+      phone: form.elements.number.value,
     };
     dispatch(addUser(newUser));
 
