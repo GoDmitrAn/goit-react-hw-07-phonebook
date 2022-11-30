@@ -1,13 +1,8 @@
 import React from 'react';
-// import { customAlphabet } from 'nanoid';
-
 import { useDispatch, useSelector } from 'react-redux';
-// import { addUser } from 'redux/usersSlice';
 import { Form, LabelName, Submit } from './ContactForm.styled';
 import { selectUsers } from 'redux/selectors';
 import { addUser } from 'redux/operations';
-
-// const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
