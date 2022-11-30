@@ -20,4 +20,10 @@ export const DelBtn = styled.button`
 export const Span = styled.span`
   font-size: 16px;
   font-weight: 500;
+  width: 100%;
+  display: flex;
+  padding-right: 10px;
+`;
+export const Phone = styled.span`
+  margin-left: auto;
 `;

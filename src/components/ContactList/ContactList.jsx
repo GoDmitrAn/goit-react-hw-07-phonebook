@@ -2,7 +2,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser } from 'redux/operations';
 import { selectFilteredContacts } from 'redux/selectors';
 
-import { ListBox, ContactListItem, DelBtn, Span } from './ContactList.styled';
+import {
+  ListBox,
+  ContactListItem,
+  DelBtn,
+  Span,
+  Phone,
+} from './ContactList.styled';
 export const ContactList = () => {
   const dispatch = useDispatch();
   const contactsList = useSelector(selectFilteredContacts);
@@ -13,7 +19,7 @@ export const ContactList = () => {
         return (
           <ContactListItem key={id}>
             <Span>
-              {name} : {phone}
+              {name} : <Phone> {phone}</Phone>
             </Span>
             <DelBtn type="button" onClick={() => dispatch(deleteUser(id))}>
               Delete
